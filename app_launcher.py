@@ -1,14 +1,8 @@
 
 """
-Project J.A.R.V.I.S (Gesture Interface V3)
-Start here.
+AIRDESK — Hand Gesture PC Control System
+Entry point. Run this file to start the application.
 """
-import sys
-import os
-
-# Ensure proper import resolution
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
 from gesture_v3.core.orchestrator import SystemController
 
 if __name__ == "__main__":

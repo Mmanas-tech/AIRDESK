@@ -4,8 +4,6 @@ import pyautogui
 import numpy as np
 from gesture_v3 import engine_constants
 
-pyautogui.FAILSAFE = False 
-
 class PhysicsCursor:
     """
     Control Layer V6 (Air Mouse).
@@ -38,9 +36,10 @@ class PhysicsCursor:
         # 3. Acceleration
         gain = engine_constants.BASE_SENSITIVITY * (1.0 + engine_constants.ACCELERATION_FACTOR * mag)
         gain = min(gain, engine_constants.MAX_SENSITIVITY)
-        
-        move_x = dx * engine_constants.WINDOW_WIDTH * gain
-        move_y = dy * engine_constants.WINDOW_HEIGHT * gain
+
+        screen_w, screen_h = engine_constants.get_screen_size()
+        move_x = dx * screen_w * gain
+        move_y = dy * screen_h * gain
         
         # Accumulate
         self.remainder_x += move_x
@@ -50,6 +49,9 @@ class PhysicsCursor:
         int_move_y = int(self.remainder_y)
         
         if int_move_x != 0 or int_move_y != 0:
-            pyautogui.move(int_move_x, int_move_y, _pause=False)
-            self.remainder_x -= int_move_x
-            self.remainder_y -= int_move_y
+            try:
+                pyautogui.move(int_move_x, int_move_y, _pause=False)
+                self.remainder_x -= int_move_x
+                self.remainder_y -= int_move_y
+            except pyautogui.FailSafeException:
+                pass
